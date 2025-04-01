@@ -1,0 +1,20 @@
+group 'com.co.booking_ai.service.infraestructure'
+version "$releaseVersion"
+
+dependencies {
+    //mapper
+    implementation "org.modelmapper:modelmapper:$modelMapperVersion"
+
+    //Cache
+    //implementation "org.springframework.boot:spring-boot-starter-cache"
+    //implementation "org.springframework.boot:spring-boot-starter-data-redis"
+
+    //database
+    //implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    //runtimeOnly 'mysql:mysql-connector-java'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+
+    //local
+    implementation project(':domain')
+}

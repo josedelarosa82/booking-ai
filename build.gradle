@@ -1,0 +1,93 @@
+plugins {
+    id 'io.spring.dependency-management' version "$dependencyManagementVersion"
+    id 'java'
+    id 'jacoco'
+    id 'org.sonarqube' version "$sonarqubeVersion"
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    compileJava {options.encoding = "UTF-8"}
+    compileTestJava {options.encoding = "UTF-8"}
+    group = 'com.co.booking_ai.user'
+    version "$releaseVersion"
+    compileJava {
+        sourceCompatibility = 13
+        targetCompatibility = 13
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.groovy.jacoco.reportPath", "${buildDir}/jacoco/test.exec"
+            property "sonar.jacoco.reportPath", "${buildDir}/jacoco/test.exec"
+            property "sonar.binaries", "${buildDir}/classes"
+            property "sonar.groovy.binaries", "${buildDir.name}${File.separator}classes"
+        }
+    }
+
+
+    repositories {
+//        maven {
+//            url "http://appusuario.com/nexus/repository/maven-ms/"
+//            allowInsecureProtocol = true
+//            credentials {
+//                username "admin"
+//                password "red-amarilla"
+//            }
+//        }
+        mavenCentral()
+        maven { url "https://repo.spring.io/milestone" }
+        maven {
+            url 'https://naturalprogrammer.github.io/mvn-repository'
+        }
+    }
+    dependencies {
+        //Spring boot
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+        //lombok
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+
+        //test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation "junit:junit:$junitVersion"
+        testImplementation 'io.projectreactor:reactor-test'
+    }
+
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+        group = "Reporting"
+        reports {
+            xml.enabled true
+            csv.enabled false
+            html.destination file("${buildDir}/jacocoHtml")
+        }
+        executionData(test)
+    }
+    test {
+        useJUnitPlatform {
+            excludeTags 'slow'
+            includeEngines 'junit-jupiter', 'junit-vintage'
+        }
+        finalizedBy jacocoTestReport
+    }
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+        }
+    }
+}
+
+
+// Print App Info
+task printAppInfo {
+    doLast {
+        println project.name + "|" + subprojects[0].version
+    }
+}

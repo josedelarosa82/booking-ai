@@ -1,0 +1,33 @@
+plugins {
+    id 'org.springframework.boot' version "$springBootVersion"
+}
+
+group 'com.co.booking_ai.service'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+dependencies {
+    //Spring boot
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //spring cloud
+    implementation "org.springframework.cloud:spring-cloud-starter"
+
+    //mapper
+    implementation "org.modelmapper:modelmapper:$modelMapperVersion"
+
+    //swagger
+    implementation "io.springfox:springfox-boot-starter:$swaggerVersion"
+    implementation "io.springfox:springfox-swagger-ui:$swaggerVersion"
+
+    //local
+    implementation project(':domain')
+    implementation project(':infraestructure')
+
+    //Common
+    //implementation "com.co.taxislibres.common:ms-base-common-application:$baseCommonVersion"
+}

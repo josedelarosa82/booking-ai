@@ -1,0 +1,28 @@
+group 'com.co.booking_ai.service.domain'
+version "$releaseVersion"
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+dependencies {
+    //mapper
+    implementation "org.modelmapper:modelmapper:$modelMapperVersion"
+
+    implementation "javax.validation:validation-api:$validationApiVersion"
+    implementation "org.apache.httpcomponents:httpclient:$httpclientVersion"
+    implementation "org.json:json:$jsonVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+
+
+    //swagger
+    implementation "io.springfox:springfox-boot-starter:$swaggerVersion"
+    implementation "io.springfox:springfox-swagger-ui:$swaggerVersion"
+
+//
+//    //Cache
+//    implementation "org.springframework.boot:spring-boot-starter-cache"
+//    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+
+}

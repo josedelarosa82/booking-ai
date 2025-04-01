@@ -1,0 +1,102 @@
+# Copyright 2017 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+swagger: '2.0'
+info:
+  description: Servicios del usuarios
+  version: '1.0.0'
+  title: Microservicio servicios del usuario
+host: 'servicios-usuario-api-v1.endpoints.red-amarilla.cloud.goog'
+x-google-endpoints:
+- name: "servicios-usuario-api-v1.endpoints.red-amarilla.cloud.goog"
+  target: "35.237.96.175"
+schemes:
+  - "https"
+  - "http"
+x-google-management:
+  metrics:
+    # Define a metric for read requests.
+    - name: "read-requests"
+      displayName: "Read requests"
+      valueType: INT64
+      metricKind: DELTA
+    # Define a metric for write requests.
+    - name: "write-requests"
+      displayName: "Write requests"
+      valueType: INT64
+      metricKind: DELTA
+  quota:
+    limits:
+      # Rate limit for read requests.
+      - name: "read-requests-limit"
+        metric: "read-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10000
+      # Rate limit for write requests.
+      - name: "write-request-limit"
+        metric: "write-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10000
+tags:
+  - name: ms-servicios-usuario
+    description: Api servicios del usuarios
+paths:
+  /api/taxislibres/v1/servicios-usuario:
+    post:
+      tags:
+        - servicios usuarios
+      summary: reporte
+      description: 'persiste un servicio del usuario'
+      operationId: reportar
+      x-google-quota:
+        metricCosts:
+          "read-requests": 1      
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Autorization
+          in: header
+          description: Este campo en envía el token para autorizar la transacción.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Calculo correcto
+        '201':
+          description: Created
+        '400':
+          description: Campos en la solicitud errados
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Error Inesperado
+securityDefinitions:
+  google_service_account:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    # CUENTAS DE SERVICIOS DE DEV
+    # Replace YOUR-SERVICE-ACCOUNT-EMAIL with your service account email.
+    x-google-issuer: "cloudendpoint-microservices@red-amarilla.iam.gserviceaccount.com"
+    # Replace YOUR-SERVICE-ACCOUNT-EMAIL with your service account email.
+    x-google-jwks_uri: "https://www.googleapis.com/robot/v1/metadata/x509/cloudendpoint-microservices%40red-amarilla.iam.gserviceaccount.com"
+    # This must match the "aud" field in the JWT. You can add multiple audiences to accept JWTs from multiple clients.
+    x-google-audiences: "tarificador-api.red-amarilla"

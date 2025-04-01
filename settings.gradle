@@ -1,0 +1,7 @@
+rootProject.name = 'ms-booking-ai-service'
+
+include 'domain'
+include 'infraestructure'
+include 'application'
+
+project(':application').name = rootProject.name
