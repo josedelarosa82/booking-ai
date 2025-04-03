@@ -5,18 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 
 @Slf4j
-public enum DayOfWeekEnum {
-    MONDAY(1),
-    TUESDAY(2),
-    WEDNESDAY(3),
-    THURSDAY(4),
-    FRIDAY(5),
-    SATURDAY(6),
-    SUNDAY(7);
+public enum DayEnum {
+    monday(1),
+    tuesday(2),
+    wednesday(3),
+    thursday(4),
+    friday(5),
+    saturday(6),
+    sunday(7);
 
     private final int id;
 
-    private DayOfWeekEnum(int id) {
+    private DayEnum(int id) {
         this.id = id;
     }
 

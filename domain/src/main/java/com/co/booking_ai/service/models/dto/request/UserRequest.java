@@ -1,4 +1,4 @@
-package com.co.booking_ai.service.models.customer;
+package com.co.booking_ai.service.models.dto.request;
 
 import com.co.booking_ai.service.enums.UserStatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -15,10 +14,8 @@ import java.util.Date;
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ToString
-public class User implements Serializable {
+public class UserRequest implements Serializable {
 
-    @ApiParam(value = "User Id")
-    private String id;
     @ApiParam(value = "User name")
     private String name;
     @ApiParam(value = "User email")
@@ -27,12 +24,6 @@ public class User implements Serializable {
     private String phone;
     @ApiParam(value = "User status")
     private UserStatusEnum status;
-    @ApiParam(value = "Create date")
-    private Date createDate;
-    @ApiParam(value = "Create by")
-    private String createBy;
-    @ApiParam(value = "Update date")
-    private Date updateDate;
     @ApiParam(value = "Update by")
     private String updateBy;
 

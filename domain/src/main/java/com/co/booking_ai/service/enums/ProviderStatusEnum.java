@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 
 @Slf4j
-public enum ServiceTypeEnum {
-    onsite("on-site"),
-    virtual("virtual");
+public enum ProviderStatusEnum {
+    active("active"),
+    inactive("inactive");
 
     private final String id;
 
-    private ServiceTypeEnum(String id) {
+    private ProviderStatusEnum(String id) {
         this.id = id;
     }
 
@@ -19,7 +19,7 @@ public enum ServiceTypeEnum {
         return (String) Arrays.stream(values()).filter((dse) -> {
             return dse.getId().contentEquals(id);
         }).map(Enum::name).findFirst().orElseThrow(() -> {
-            return new RuntimeException("OBJECT_SERVICE_TYPE_NOT_VALID");
+            return new RuntimeException("OBJECT_STATUS_NOT_VALID");
         });
     }
 
@@ -28,7 +28,7 @@ public enum ServiceTypeEnum {
         return (String) Arrays.stream(values()).filter((dse) -> {
             return dse.name().contentEquals(name);
         }).map(value -> value.getId()).findFirst().orElseThrow(() -> {
-            return new RuntimeException("OBJECT_SERVICE_TYPE_NOT_VALID");
+            return new RuntimeException("OBJECT_STATUS_NOT_VALID");
         });
     }
 

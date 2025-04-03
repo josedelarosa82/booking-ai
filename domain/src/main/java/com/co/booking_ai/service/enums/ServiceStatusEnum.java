@@ -5,19 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 
 @Slf4j
-public enum StatusEnum {
-    ACTIVE("active"),
-    INACTIVE("inactive"),
-    BOOKED("booked"),
-    PENDING("pending"),
-    APPROVED("approved"),
-    REJECTED("rejected"),
-    BLOCKED("blocked"),
-    DISABLED("disabled");
+public enum ServiceStatusEnum {
+    active("active"),
+    inactive("inactive");
 
     private final String id;
 
-    private StatusEnum(String id) {
+    private ServiceStatusEnum(String id) {
         this.id = id;
     }
 

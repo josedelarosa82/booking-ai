@@ -1,14 +1,21 @@
 package com.co.booking_ai.service.usecase.customer;
 
 
+import com.co.booking_ai.service.constants.Constants;
+import com.co.booking_ai.service.enums.UserStatusEnum;
+import com.co.booking_ai.service.enums.error.ErrorUserEnum;
+import com.co.booking_ai.service.exception.UserException;
 import com.co.booking_ai.service.models.customer.User;
-import com.co.booking_ai.service.ports.input.UserServicePort;
-import com.co.booking_ai.service.ports.output.UserImpPort;
+import com.co.booking_ai.service.models.dto.request.UserRequest;
+import com.co.booking_ai.service.ports.input.customer.UserServicePort;
+import com.co.booking_ai.service.ports.output.customer.UserImpPort;
+import com.co.booking_ai.service.utils.Dates;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
@@ -61,18 +68,54 @@ public class UserService implements UserServicePort {
 //                .doOnError(error -> log.error(error.getMessage()));*/
 //    }
 
-    public Mono<User> findUserById(String id) {
+    public Mono<User> findById(String id) {
         return userImpPort.findById(id)
                 .doOnError(error -> {
-                    log.error("Error UserService.findServicesById({}) -> {}", id, error.getMessage());
+                    log.error("Error UserService.findById({}) -> {}", id, error.getMessage());
 
                 });
     }
 
-    public Mono<User> save(User user) {
-        return userImpPort.save(user)
+    public Flux<User> findAll() {
+        return userImpPort.findAll()
                 .doOnError(error -> {
-                    log.error("Error UserService.save({}) -> {}", user, error.getMessage());
+                    log.error("Error UserService.findAll({}) -> {}", error.getMessage());
+
+                });
+    }
+
+    public Mono<User> create(User user) {
+        return Mono.just(user)
+                .switchIfEmpty(Mono.error(new UserException(ErrorUserEnum.USER_NOT_FOUND)))
+                .map(value -> {
+                    value.setCreateDate(Dates.getCurrentDate());
+                    value.setStatus(value != null && value.getStatus()!=null && !value.getStatus().equals("") ? value.getStatus() : UserStatusEnum.active);
+                    value.setCreateBy(value != null && value.getCreateBy()!=null && !value.getCreateBy().equals("") ? value.getCreateBy() : Constants.DEFAULT_USER);
+                    return value;
+                })
+                .flatMap(userImpPort::save)
+                .doOnError(error -> {
+                    log.error("Error UserService.create({}) -> {}", user, error.getMessage());
+
+                });
+    }
+
+    public Mono<User> update(UserRequest user, String id) {
+        return findById(id)
+                .switchIfEmpty(Mono.error(new UserException(ErrorUserEnum.USER_NOT_FOUND)))
+                .map(value -> {
+                    value.setId(id);
+                    value.setName(user != null && user.getName()!=null && !user.getName().equals("") ? user.getName() : value.getName());
+                    value.setEmail(user != null && user.getEmail()!=null && !user.getEmail().equals("") ? user.getEmail() : value.getEmail());
+                    value.setPhone(user != null && user.getPhone()!=null && !user.getPhone().equals("") ? user.getPhone() : value.getPhone());
+                    value.setStatus(user != null && user.getStatus()!=null && !user.getStatus().equals("") ? user.getStatus() : value.getStatus());
+                    value.setUpdateBy(user != null && user.getUpdateBy()!=null && !user.getUpdateBy().equals("") ? user.getUpdateBy() : (value.getUpdateBy() !=null && !value.getUpdateBy().equals("")) ? value.getUpdateBy() : Constants.DEFAULT_USER);
+                    value.setUpdateDate(Dates.getCurrentDate());
+                    return value;
+                })
+                .flatMap(userImpPort::save)
+                .doOnError(error -> {
+                    log.error("Error UserService.update({}) -> {}", user, error.getMessage());
 
                 });
     }

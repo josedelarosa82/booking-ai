@@ -10,6 +10,8 @@ public class Constants {
 	public static final String nameSpaceParamCache = "&nameSpace=" + Constants.AMBIENTE_NAMESPACE;
 	public static final String HOST_CARGUE_SRV_AERO = "http://200.91.236.125:9999/InfToAppEng-EAR-war/webresources/aero/save";
 
+	public static final int UCT = -5;
+	public static final String DEFAULT_USER = "SYSTEM";
 
 
 }

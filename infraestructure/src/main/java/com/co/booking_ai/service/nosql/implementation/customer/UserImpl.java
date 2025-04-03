@@ -1,16 +1,15 @@
-package com.co.booking_ai.service.nosql.implementation;
+package com.co.booking_ai.service.nosql.implementation.customer;
 
 import com.co.booking_ai.service.models.customer.User;
 import com.co.booking_ai.service.nosql.document.customer.UserDocument;
-import com.co.booking_ai.service.nosql.repository.UserRepository;
-import com.co.booking_ai.service.ports.output.UserImpPort;
+import com.co.booking_ai.service.nosql.repository.customer.UserRepository;
+import com.co.booking_ai.service.ports.output.customer.UserImpPort;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Date;
 
 @Service
 @Slf4j
@@ -28,20 +27,19 @@ public class UserImpl implements UserImpPort {
                 .doOnNext(value -> log.debug("Find user by id: {}", value));
     }
 
+    public Flux<User> findAll() {
+        return userRepository.findAll()
+                .map(value -> modelMapper.map(value, User.class))
+                .doOnNext(value -> log.debug("Find all users: {}", value));
+    }
+
     public Mono<User> save(User user) {
         return Mono.just(user)
-                .map(value -> {
-                    return User.builder()
-                            .email(value.getEmail())
-                            .name(value.getName())
-                            .status(value.getStatus())
-                            .createBy(value.getCreateBy())
-                            .createDate(new Date())
-                            .build();
-                })
                 .map(value -> modelMapper.map(value, UserDocument.class))
                 .flatMap(userRepository::save)
                 .map(value -> modelMapper.map(value, User.class))
-                .doOnNext(value -> log.debug("Saving user: {}", value));
+                .doOnNext(value -> log.debug("Creating user: {}", value));
     }
+
+
 }

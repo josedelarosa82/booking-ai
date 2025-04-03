@@ -1,7 +1,7 @@
 package com.co.booking_ai.service.models.provider;
 
+import com.co.booking_ai.service.enums.ServiceStatusEnum;
 import com.co.booking_ai.service.enums.ServiceTypeEnum;
-import com.co.booking_ai.service.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiParam;
 import lombok.*;
@@ -20,7 +20,8 @@ import java.util.Date;
 public class Service implements Serializable {
 
     private static final long serialVersionUID = 4048470894805432878L;
-    @ApiParam(value = "Service Id")
+
+    @ApiParam(value = "Service id")
     private String id;
     @ApiParam(value = "Service name")
     private String name;
@@ -32,12 +33,14 @@ public class Service implements Serializable {
     private BigDecimal price;
     @ApiParam(value = "Service type")
     private ServiceTypeEnum type;
-    @ApiParam(value = "Provider Id")
-    private String providerId;
     @ApiParam(value = "Service status")
-    private StatusEnum status;
+    private ServiceStatusEnum status;
+    @ApiParam(value = "Create date")
+    private Date createDate;
     @ApiParam(value = "Create by")
     private String createBy;
+    @ApiParam(value = "Update date")
+    private Date updateDate;
     @ApiParam(value = "Update by")
     private String updateBy;
 }
