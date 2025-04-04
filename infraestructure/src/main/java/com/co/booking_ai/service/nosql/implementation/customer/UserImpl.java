@@ -27,6 +27,12 @@ public class UserImpl implements UserImpPort {
                 .doOnNext(value -> log.debug("Find user by id: {}", value));
     }
 
+    public Mono<User> findByPhone(String phone) {
+        return userRepository.findByPhone(phone)
+                .map(value -> modelMapper.map(value, User.class))
+                .doOnNext(value -> log.debug("Find user by phone: {}", value));
+    }
+
     public Flux<User> findAll() {
         return userRepository.findAll()
                 .map(value -> modelMapper.map(value, User.class))

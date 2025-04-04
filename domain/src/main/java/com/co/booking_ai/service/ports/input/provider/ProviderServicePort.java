@@ -10,6 +10,8 @@ public interface ProviderServicePort {
 
     Mono<Provider> findById(String id);
 
+    Mono<Provider> findByPhone(String phone);
+
     Mono<Provider> create(Provider provider);
 
     Mono<Provider> update(ProviderRequest provider, String id);

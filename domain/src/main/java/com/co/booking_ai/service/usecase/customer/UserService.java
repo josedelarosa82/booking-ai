@@ -76,6 +76,14 @@ public class UserService implements UserServicePort {
                 });
     }
 
+    public Mono<User> findByPhone(String phone) {
+        return userImpPort.findByPhone(phone)
+                .doOnError(error -> {
+                    log.error("Error UserService.findByPhone({}) -> {}", phone, error.getMessage());
+
+                });
+    }
+
     public Flux<User> findAll() {
         return userImpPort.findAll()
                 .doOnError(error -> {

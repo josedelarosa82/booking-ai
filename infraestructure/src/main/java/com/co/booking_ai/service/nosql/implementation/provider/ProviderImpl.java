@@ -27,6 +27,12 @@ public class ProviderImpl implements ProviderImpPort {
                 .doOnNext(value -> log.debug("Find provider by id: {}", value));
     }
 
+    public Mono<Provider> findByPhone(String phone) {
+        return providerRepository.findByPhone(phone)
+                .map(value -> modelMapper.map(value, Provider.class))
+                .doOnNext(value -> log.debug("Find provider by phone: {}", value));
+    }
+
     public Flux<Provider> findAll() {
         return providerRepository.findAll()
                 .map(value -> modelMapper.map(value, Provider.class))

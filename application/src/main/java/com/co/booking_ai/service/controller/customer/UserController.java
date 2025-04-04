@@ -59,6 +59,17 @@ public class UserController {
                 .doOnError(error -> log.error("Error querying user by id:{} - {}", id, error.getMessage()));
     }
 
+    @GetMapping(path = "/phone/{phone}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE}, consumes = {MediaType.APPLICATION_STREAM_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(value = "Get user by phone", response = User.class, httpMethod = "GET")
+    @ApiResponses({@ApiResponse(code = 200, message = "Result was success."),
+            @ApiResponse(code = 400, message = "Incorrect input data."),
+            @ApiResponse(code = 500, message = "Unexpected error.")})
+    public Mono<User> findByPhone(@PathVariable String phone) {
+        return userServicePort.findByPhone(phone)
+                .doOnNext(value -> log.debug("User was consulted -> {} ", phone))
+                .doOnError(error -> log.error("Error querying user by phone:{} - {}", phone, error.getMessage()));
+    }
+
     @GetMapping(path = "",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE}, consumes = {MediaType.APPLICATION_STREAM_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "Get all users", response = User.class, httpMethod = "GET")
     @ApiResponses({@ApiResponse(code = 200, message = "Result was success."),

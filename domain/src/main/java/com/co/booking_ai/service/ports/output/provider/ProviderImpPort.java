@@ -8,6 +8,8 @@ public interface ProviderImpPort {
 
     Mono<Provider> findById(String id);
 
+    Mono<Provider> findByPhone(String phone);
+
     Mono<Provider> save(Provider provider);
 
     Flux<Provider> findAll();

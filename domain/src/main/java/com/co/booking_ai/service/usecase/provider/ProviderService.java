@@ -38,6 +38,14 @@ public class ProviderService implements ProviderServicePort {
                 });
     }
 
+    public Mono<Provider> findByPhone(String phone) {
+        return providerImpPort.findByPhone(phone)
+                .doOnError(error -> {
+                    log.error("Error ProviderService.findByPhone({}) -> {}", phone, error.getMessage());
+
+                });
+    }
+
     public Flux<Provider> findAll() {
         return providerImpPort.findAll()
                 .doOnError(error -> {

@@ -11,6 +11,8 @@ public interface UserServicePort {
 
     Mono<User> findById(String id);
 
+    Mono<User> findByPhone(String phone);
+
     Mono<User> create(User user);
 
     Mono<User> update(UserRequest user, String id);

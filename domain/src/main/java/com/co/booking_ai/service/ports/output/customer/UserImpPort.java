@@ -8,6 +8,8 @@ public interface UserImpPort {
 
     Mono<User> findById(String id);
 
+    Mono<User> findByPhone(String phone);
+
     Mono<User> save(User user);
 
     Flux<User> findAll();

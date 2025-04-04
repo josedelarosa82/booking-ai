@@ -59,6 +59,17 @@ public class ProviderController {
                 .doOnError(error -> log.error("Error querying provider by id:{} - {}", id, error.getMessage()));
     }
 
+    @GetMapping(path = "/phone/{phone}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE}, consumes = {MediaType.APPLICATION_STREAM_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(value = "Get provider by phone", response = Provider.class, httpMethod = "GET")
+    @ApiResponses({@ApiResponse(code = 200, message = "Result was success."),
+            @ApiResponse(code = 400, message = "Incorrect input data."),
+            @ApiResponse(code = 500, message = "Unexpected error.")})
+    public Mono<Provider> findByPhone(@PathVariable String phone) {
+        return providerServicePort.findByPhone(phone)
+                .doOnNext(value -> log.debug("Provider was consulted -> {} ", phone))
+                .doOnError(error -> log.error("Error querying provider by phone:{} - {}", phone, error.getMessage()));
+    }
+
     @GetMapping(path = "",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE}, consumes = {MediaType.APPLICATION_STREAM_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "Get all providers", response = Provider.class, httpMethod = "GET")
     @ApiResponses({@ApiResponse(code = 200, message = "Result was success."),
