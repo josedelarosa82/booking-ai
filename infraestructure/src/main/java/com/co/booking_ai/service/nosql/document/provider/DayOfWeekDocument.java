@@ -4,6 +4,8 @@ import com.co.booking_ai.service.enums.DayEnum;
 import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Time;
+
 @Data
 @ToString
 @Builder
@@ -12,8 +14,8 @@ import java.io.Serializable;
 public class DayOfWeekDocument implements Serializable {
 
     private DayEnum dayOfWeek;
-    private int fromHour;
-    private int toHour;
-    private int timeSlot;
+    private Time fromHour;
+    private Time toHour;
+    private long timeSlot;
 
 }

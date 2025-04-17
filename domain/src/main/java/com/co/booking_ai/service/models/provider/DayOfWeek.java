@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -20,10 +21,10 @@ public class DayOfWeek implements Serializable {
     @ApiParam(value = "Day of week")
     private DayEnum day;
     @ApiParam(value = "From hour")
-    private int fromHour;
+    private LocalTime fromHour;//Represented in am/pm format. E.g. 10:00:00 military time
     @ApiParam(value = "To hour")
-    private int toHour;
+    private LocalTime toHour;//Represented in am/pm format. E.g. 06:00:00 military time
     @ApiParam(value = "Time slot")
-    private int timeSlot;
+    private long timeSlot;//Represented in minutes
 
 }

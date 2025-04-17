@@ -1,6 +1,7 @@
 package com.co.booking_ai.service.ports.input.provider;
 
 import com.co.booking_ai.service.models.dto.request.ProviderRequest;
+import com.co.booking_ai.service.models.dto.response.ProviderScheduleRes;
 import com.co.booking_ai.service.models.provider.Provider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -9,6 +10,8 @@ public interface ProviderServicePort {
 
 
     Mono<Provider> findById(String id);
+
+    Mono<ProviderScheduleRes> findScheduleByIdAndDate(String id, long date);
 
     Mono<Provider> findByPhone(String phone);
 

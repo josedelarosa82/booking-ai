@@ -1,6 +1,9 @@
 package com.co.booking_ai.service.controller.provider;
 
+import com.co.booking_ai.service.enums.error.ErrorProviderEnum;
+import com.co.booking_ai.service.exception.ProviderException;
 import com.co.booking_ai.service.models.dto.request.ProviderRequest;
+import com.co.booking_ai.service.models.dto.response.ProviderScheduleRes;
 import com.co.booking_ai.service.models.provider.Provider;
 import com.co.booking_ai.service.ports.input.provider.ProviderServicePort;
 import io.swagger.annotations.Api;
@@ -43,7 +46,14 @@ public class ProviderController {
             @ApiResponse(code = 400, message = "Incorrect input data."),
             @ApiResponse(code = 500, message = "Unexpected error.")})
     public Mono<Provider> updateProvider(@RequestBody ProviderRequest provider, @PathVariable String id) {
-        return providerServicePort.update(provider, id)
+        return Mono.just(provider)
+                .flatMap(value -> {
+                    if (value.getSchedule().getDayOfWeeks() == null ||
+                            value.getSchedule().getDayOfWeeks().isEmpty()) {
+                        return Mono.error(new ProviderException(ErrorProviderEnum.FROM_DATE_NOT_VALID));
+                    }
+                    return providerServicePort.update(value, id);
+                })
                 .doOnNext(value -> log.debug("Provider was updated -> {} ", provider))
                 .doOnError(error -> log.error("Error updating provider:{} - {}", provider, error.getMessage()));
     }
@@ -57,6 +67,18 @@ public class ProviderController {
         return providerServicePort.findById(id)
                 .doOnNext(value -> log.debug("Provider was consulted -> {} ", id))
                 .doOnError(error -> log.error("Error querying provider by id:{} - {}", id, error.getMessage()));
+    }
+
+    @GetMapping(path = "/{id}/date/{date}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE}, consumes = {MediaType.APPLICATION_STREAM_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(value = "Get schedule by id and date", response = ProviderScheduleRes.class, httpMethod = "GET")
+    @ApiResponses({@ApiResponse(code = 200, message = "Result was success."),
+            @ApiResponse(code = 400, message = "Incorrect input data."),
+            @ApiResponse(code = 500, message = "Unexpected error.")})
+    public Mono<ProviderScheduleRes> findScheduleByIdAndDate(@PathVariable("id") String id,
+                                                             @PathVariable("date") long date) {
+        return providerServicePort.findScheduleByIdAndDate(id, date)
+                .doOnNext(value -> log.debug("Schedule provider was consulted -> {} ", id))
+                .doOnError(error -> log.error("Error querying schedule provider by id:{} - {}", id, error.getMessage()));
     }
 
     @GetMapping(path = "/phone/{phone}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE}, consumes = {MediaType.APPLICATION_STREAM_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})

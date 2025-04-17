@@ -6,7 +6,10 @@ import com.co.booking_ai.service.enums.ProviderStatusEnum;
 import com.co.booking_ai.service.enums.error.ErrorProviderEnum;
 import com.co.booking_ai.service.exception.ProviderException;
 import com.co.booking_ai.service.models.dto.request.ProviderRequest;
+import com.co.booking_ai.service.models.dto.response.ProviderScheduleRes;
 import com.co.booking_ai.service.models.provider.Provider;
+import com.co.booking_ai.service.models.provider.Schedule;
+import com.co.booking_ai.service.models.provider.Time;
 import com.co.booking_ai.service.ports.input.provider.ProviderServicePort;
 import com.co.booking_ai.service.ports.output.provider.ProviderImpPort;
 import com.co.booking_ai.service.utils.Dates;
@@ -18,8 +21,13 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,6 +42,20 @@ public class ProviderService implements ProviderServicePort {
         return providerImpPort.findById(id)
                 .doOnError(error -> {
                     log.error("Error ProviderService.findById({}) -> {}", id, error.getMessage());
+
+                });
+    }
+
+    public Mono<ProviderScheduleRes> findScheduleByIdAndDate(String id, long date) {
+        return providerImpPort.findById(id)
+                .map(provider -> {
+                    return ProviderScheduleRes.builder()
+                            .id(provider.getId())
+                            .times(convertScheduleToTimes(provider.getSchedule(), date))
+                            .build();
+                })
+                .doOnError(error -> {
+                    log.error("Error ProviderService.findScheduleByIdAndDate({},{}) -> {}", id, date, error.getMessage());
 
                 });
     }
@@ -97,6 +119,19 @@ public class ProviderService implements ProviderServicePort {
                     log.error("Error ProviderService.update({}) -> {}", provider, error.getMessage());
 
                 });
+    }
+
+    private List<Time> convertScheduleToTimes(Schedule schedule, long date) {
+        System.out.println("date of week: " + Dates.getDayNameOfWeek(date));
+        return schedule.getDayOfWeeks().stream()
+                .filter(dayOfWeek -> Dates.getDayNameOfWeek(date).equals(dayOfWeek.getDay().name()))
+                .map(dayOfWeek -> {
+                    Time time = new Time();
+                    //time.setFrom(dayOfWeek.getFrom());
+                    //time.setTo(dayOfWeek.getTo());
+                    return time;
+                })
+                .collect(Collectors.toList());
     }
 
 }
