@@ -14,7 +14,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ToString
-public class ProviderScheduleRes implements Serializable {
+public class BookingAppointmentProviderRes implements Serializable {
     private static final long serialVersionUID = 4948470894805432878L;
 
     private String id;

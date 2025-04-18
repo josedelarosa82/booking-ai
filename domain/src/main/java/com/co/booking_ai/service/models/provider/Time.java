@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class Time implements Serializable {
     private static final long serialVersionUID = 4048470894805432878L;
 
     @ApiParam(value = "Hour from")
-    private String from;
+    private LocalTime from;
     @ApiParam(value = "Hour to")
-    private String to;
+    private LocalTime to;
 }

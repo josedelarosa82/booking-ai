@@ -5,15 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 
 @Slf4j
-public enum ProviderStatusEnum {
-    active("active"),
-    inactive("inactive"),
-    removed("removed"),
-    blocked("blocked");
+public enum BookingStatusEnum {
+    reserved("reserved"),
+    pending("pending"),
+    finished("finished"),
+    canceled("canceled");
 
     private final String id;
 
-    private ProviderStatusEnum(String id) {
+    private BookingStatusEnum(String id) {
         this.id = id;
     }
 

@@ -4,7 +4,10 @@ import com.co.booking_ai.service.constants.Constants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
@@ -93,6 +96,16 @@ public class Dates {
 
     public static String getDayNameOfWeek(long unixDate) {
         ZonedDateTime zonedDateTime = convertUnixToDate(unixDate).toInstant().atZone(ZoneId.ofOffset(UTC, ZoneOffset.ofHours(Constants.UCT)));
+        return zonedDateTime.getDayOfWeek().name();
+    }
+
+    public static int getDayIdOfWeek(Date date) {
+        ZonedDateTime zonedDateTime = date.toInstant().atZone(ZoneId.ofOffset(UTC, ZoneOffset.ofHours(Constants.UCT)));
+        return zonedDateTime.getDayOfWeek().getValue();
+    }
+
+    public static String getDayNameOfWeek(Date date) {
+        ZonedDateTime zonedDateTime = date.toInstant().atZone(ZoneId.ofOffset(UTC, ZoneOffset.ofHours(Constants.UCT)));
         return zonedDateTime.getDayOfWeek().name();
     }
 

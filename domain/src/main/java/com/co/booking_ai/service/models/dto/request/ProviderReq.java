@@ -17,7 +17,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ToString
-public class ProviderRequest implements Serializable {
+public class ProviderReq implements Serializable {
 
     @ApiParam(value = "Provider Id")
     private String id;
